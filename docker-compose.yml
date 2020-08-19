@@ -1,5 +1,13 @@
 version: '3'
 services:
+  portainer:
+    container_name: "portainer"
+    image: portainer/portainer:linux-arm
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${CONFIG_DIR}/.portainer/config:/data
+    restart: always
+    network_mode: host
   homeassistant:
     container_name: home-assistant
     image: homeassistant/home-assistant:stable
