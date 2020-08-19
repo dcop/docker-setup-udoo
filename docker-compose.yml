@@ -1,0 +1,63 @@
+version: '3'
+services:
+  homeassistant:
+    container_name: home-assistant
+    image: homeassistant/home-assistant:stable
+    volumes:
+      - /home/daniele/.ha/config:/config
+    environment:
+      - TZ=Europe/Rome
+    restart: unless-stopped
+    network_mode: host
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "67:67/udp"
+      - "80:80/tcp"
+      - "443:443/tcp"
+    environment:
+      TZ: 'Europe/Rome'
+    volumes:
+      - '/home/daniele/.pihole/etc-pihole/:/etc/pihole/'
+      - '/home/daniele/.pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    restart: unless-stopped
+  letsencrypt:
+    image: linuxserver/letsencrypt
+    container_name: letsencrypt
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+      - URL=dcop.duckdns.org
+      - SUBDOMAINS=wildcard
+      - VALIDATION=duckdns
+      - DUCKDNSTOKEN=862a28c2-7525-4a1e-9811-c994a82e20f9 #optional
+      - EMAIL=daniele.coppolino@gmail.com #optional
+    volumes:
+      - /home/daniele/.letsencrypt/config:/config
+    ports:
+      - 4430:443
+      - 8180:80 #optional
+    restart: unless-stopped
+  duplicati:
+    image: linuxserver/duplicati
+    container_name: duplicati
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Rome
+      - CLI_ARGS= #optional
+    volumes:
+      - /home/daniele/.duplicati/config:/config
+      - /home/daniele:/source
+    ports:
+      - 8200:8200
+    restart: unless-stopped
