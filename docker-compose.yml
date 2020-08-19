@@ -33,14 +33,14 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - URL=dcop.duckdns.org
       - SUBDOMAINS=wildcard
       - VALIDATION=duckdns
-      - DUCKDNSTOKEN=862a28c2-7525-4a1e-9811-c994a82e20f9 #optional
-      - EMAIL=daniele.coppolino@gmail.com #optional
+      - DUCKDNSTOKEN=${DUCKDNSTOKEN} #optional
+      - EMAIL=${EMAIL} #optional
     volumes:
       - ${CONFIG_DIR}/.letsencrypt/config:/config
     ports:
@@ -51,8 +51,8 @@ services:
     image: linuxserver/duplicati
     container_name: duplicati
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=${PUID}
+      - PGID=${PGID}
       - TZ=${TZ}
       - CLI_ARGS= #optional
     volumes:
