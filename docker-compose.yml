@@ -2,7 +2,7 @@ version: '3'
 services:
   portainer:
     container_name: "portainer"
-    image: portainer/portainer:linux-arm
+    image: portainer/portainer-ce
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ${CONFIG_DIR}/.portainer/config:/data
@@ -17,27 +17,9 @@ services:
       - TZ=${TZ}
     restart: unless-stopped
     network_mode: host
-  pihole:
-    container_name: pihole
-    image: pihole/pihole:latest
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "67:67/udp"
-      - "80:80/tcp"
-      - "443:443/tcp"
-    environment:
-      TZ: ${TZ}
-    volumes:
-      - '${CONFIG_DIR}/.pihole/etc-pihole/:/etc/pihole/'
-      - '${CONFIG_DIR}/.pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/'
-    dns:
-      - 127.0.0.1
-      - 1.1.1.1
-    restart: unless-stopped
-  letsencrypt:
-    image: linuxserver/letsencrypt
-    container_name: letsencrypt
+  swag:
+    image: linuxserver/swag
+    container_name: swag
     cap_add:
       - NET_ADMIN
     environment:
@@ -50,7 +32,7 @@ services:
       - DUCKDNSTOKEN=${DUCKDNSTOKEN} #optional
       - EMAIL=${EMAIL} #optional
     volumes:
-      - ${CONFIG_DIR}/.letsencrypt/config:/config
+      - ${CONFIG_DIR}/.swag/config:/config
     ports:
       - 4430:443
       - 8180:80 #optional
