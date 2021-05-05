@@ -34,8 +34,8 @@ services:
     volumes:
       - ${CONFIG_DIR}/.swag/config:/config
     ports:
-      - 4430:443
-      - 8180:80 #optional
+      - 443:443
+      - 80:80 #optional
     restart: unless-stopped
   duplicati:
     image: linuxserver/duplicati
