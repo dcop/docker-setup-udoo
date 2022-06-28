@@ -17,6 +17,16 @@ services:
       - TZ=${TZ}
     restart: unless-stopped
     network_mode: host
+  ddclient:
+    image: ghcr.io/linuxserver/ddclient
+    container_name: ddclient
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_DIR}/.ddclient/config:/config
+    restart: unless-stopped
   swag:
     image: linuxserver/swag
     container_name: swag
@@ -26,16 +36,16 @@ services:
       - PUID=${PUID}
       - PGID=${PGID}
       - TZ=${TZ}
-      - URL=dcop.duckdns.org
-      - SUBDOMAINS=wildcard
-      - VALIDATION=duckdns
-      - DUCKDNSTOKEN=${DUCKDNSTOKEN} #optional
+      - URL=coppolino.me
+      - SUBDOMAINS=plex,homeassistant
+      - VALIDATION=dns
+      - DNSPLUGIN=cloudflare
       - EMAIL=${EMAIL} #optional
     volumes:
       - ${CONFIG_DIR}/.swag/config:/config
     ports:
       - 443:443
-      - 80:80 #optional
+      - 80:80
     restart: unless-stopped
   duplicati:
     image: linuxserver/duplicati
